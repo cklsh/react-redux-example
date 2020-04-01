@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import {useSelector, useDispatch} from 'react-redux'
+import allActions from './store/actions/index'
 
 function App() {
+
+  const todos = useSelector(state => state.todos)
+  const [title, setTitle] = useState("")
+  const dispatch = useDispatch()
+
+
+  const changeTitle = ((event) => {
+    setTitle(event.target.value)
+  })
+
+  const submitTodo = ((event) => {
+    event.preventDefault()
+    dispatch(allActions.setTodo(title))
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      Todo App
+      <p>List TODO: </p>
+      <form onSubmit={submitTodo}>
+        <input value={title} onChange={changeTitle}/>
+        <input type="submit"/>
+      </form>
+      <ul>
+        {
+          todos.map((todo) => (
+            <li key={todo.key}>
+              {todo.title}
+            </li>
+          ))
+        }
+      </ul>
+
     </div>
   );
 }
 
-export default App;
+export default App
